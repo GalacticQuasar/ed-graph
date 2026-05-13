@@ -142,6 +142,7 @@ def save_graph(G: nx.DiGraph, json_path: str, graphml_path: str):
 def main():
     parser = argparse.ArgumentParser(description="Fetch Ed Discussion threads and build reference graph")
     parser.add_argument("--course-id", type=int, help="Course ID (skips interactive prompt)")
+    parser.add_argument("--output", default="ed_data", help="Output filename base (default: ed_data)")
     args = parser.parse_args()
 
     ed = EdAPI()
@@ -155,7 +156,7 @@ def main():
     print(f"  Nodes: {G.number_of_nodes()}")
     print(f"  Edges: {G.number_of_edges()}")
 
-    save_graph(G, "ed_data.json", "ed_data.graphml")
+    save_graph(G, f"{args.output}.json", f"{args.output}.graphml")
 
 
 if __name__ == "__main__":

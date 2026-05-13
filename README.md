@@ -27,6 +27,7 @@ Get a token from https://edstem.org/us/settings/api-tokens.
 ```bash
 python fetch.py                      # interactive course selection (shows your courses)
 python fetch.py --course-id 12345    # skip the course selection prompt with course ID
+python fetch.py --output my_course   # save as my_course.json and my_course.graphml
 ```
 
 This produces two files:
