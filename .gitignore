@@ -1,2 +1,13 @@
 .env
 .venv/
+
+__pycache__/
+
+# Generated files
+
+## from fetch.py
+*.json
+*.graphml
+## from visualize.py
+lib/
+*.html
