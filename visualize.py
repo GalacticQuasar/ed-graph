@@ -98,6 +98,7 @@ def build_pyvis_network(G: nx.DiGraph, output_path: str):
         filter_menu=False,
         bgcolor="#1a1a2e",
         font_color="#e0e0e0",
+        cdn_resources="remote",
     )
 
     net.set_options(
