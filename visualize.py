@@ -89,7 +89,7 @@ def build_pyvis_network(G: nx.DiGraph, output_path: str):
     course_id = G.graph.get("course_id", "")
 
     net = Network(
-        height="100vh",
+        height="98vh",
         width="100%",
         directed=True,
         notebook=False,
