@@ -49,7 +49,7 @@ def make_label(node_id: int, attrs: dict) -> str:
 
 def build_pyvis_network(G: nx.DiGraph, output_path: str):
     net = Network(
-        height="100vh",
+        height="98vh",
         width="100%",
         directed=True,
         notebook=False,
@@ -115,11 +115,17 @@ def main():
     parser = argparse.ArgumentParser(description="Visualize Ed Discussion reference graph")
     parser.add_argument("--input", default="ed_data.json", help="Path to JSON graph data")
     parser.add_argument("--output", default="ed_graph.html", help="Output HTML file path")
+    parser.add_argument("--min-degree", type=int, default=0, help="Only show nodes with at least this degree (0 = show all)")
     args = parser.parse_args()
 
     G = load_graph(args.input)
 
-    print(f"Loaded graph: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges")
+    if args.min_degree > 0:
+        keep = [n for n in G.nodes() if G.degree(n) >= args.min_degree]
+        G = G.subgraph(keep).copy()
+        print(f"Filtered to nodes with degree >= {args.min_degree}")
+
+    print(f"Graph: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges")
 
     build_pyvis_network(G, args.output)
 
