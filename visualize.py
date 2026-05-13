@@ -47,7 +47,23 @@ def make_label(node_id: int, attrs: dict) -> str:
     return f"#{node_id}\n{title}"
 
 
+ED_THREAD_URL = "https://edstem.org/us/courses/{course_id}/discussion/{thread_number}"
+
+CLICK_JS_TEMPLATE = """
+<script>
+network.on("click", function(params) {{
+    if (params.nodes.length === 1) {{
+        var nodeId = params.nodes[0];
+        var url = "https://edstem.org/us/courses/{course_id}/discussion/threads/" + nodeId;
+        window.open(url, "_blank");
+    }}
+}});
+</script>
+"""
+
+
 def build_pyvis_network(G: nx.DiGraph, output_path: str):
+    course_id = G.graph.get("course_id", "")
     net = Network(
         height="98vh",
         width="100%",
@@ -95,6 +111,7 @@ def build_pyvis_network(G: nx.DiGraph, output_path: str):
         attrs = G.nodes[node_id]
         category = attrs.get("category", "")
         color = category_color(category, all_categories)
+        url = ED_THREAD_URL.format(course_id=course_id, thread_number=node_id) if course_id else ""
 
         net.add_node(
             node_id,
@@ -108,6 +125,12 @@ def build_pyvis_network(G: nx.DiGraph, output_path: str):
         net.add_edge(src, dst)
 
     net.save_graph(output_path)
+
+    if course_id:
+        click_js = CLICK_JS_TEMPLATE.format(course_id=course_id)
+        with open(output_path, "a") as f:
+            f.write(click_js)
+
     print(f"Saved visualization to {output_path}")
 
 

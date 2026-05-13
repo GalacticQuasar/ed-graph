@@ -8,7 +8,7 @@ from edapi import EdAPI
 
 REFERENCE_PATTERN = re.compile(r"#(\d+)")
 BATCH_SIZE = 100
-REQUEST_DELAY = 0.2
+REQUEST_DELAY = 0.1
 
 
 def extract_references(document: str) -> list[int]:
@@ -92,7 +92,7 @@ def build_graph(ed: EdAPI, course_id: int) -> nx.DiGraph:
     valid_numbers = {t["number"] for t in thread_list}
     number_to_id = {t["number"]: t["id"] for t in thread_list}
 
-    G = nx.DiGraph()
+    G = nx.DiGraph(course_id=course_id)
 
     for t in thread_list:
         G.add_node(
