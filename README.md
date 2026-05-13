@@ -2,14 +2,14 @@
 
 Visualize cross-references between Ed Discussion threads as an interactive graph.
 
-Many Ed Discussion threads reference each other. This tool fetches all threads in a course, extracts `#NUMBER` references from posts and replies, and renders an interactive graph where edges point from the referencing thread to the referenced thread.
+Many Ed Discussion threads reference each other with `#NUMBER` references, where `NUMBER` corresponds to a thread id. This tool provides scripts to fetch all threads in a course and extract `#NUMBER` references from posts and replies, and then render them in an interactive graph where edges point from referencing threads to referenced threads.
 
 ## Setup
 
-Requires Python 3.10+ with [uv](https://docs.astral.sh/uv/) (recommended).
+Requires Python 3.10+.
 
 ```bash
-uv pip install edapi networkx pyvis
+pip install edapi networkx pyvis
 ```
 
 Set your Ed API token in a `.env` file:
@@ -25,8 +25,8 @@ Get a token from https://edstem.org/us/settings/api-tokens.
 ### 1. Fetch thread data
 
 ```bash
-python fetch.py                      # interactive course selection
-python fetch.py --course-id 12345    # skip the prompt
+python fetch.py                      # interactive course selection (shows your courses)
+python fetch.py --course-id 12345    # skip the course selection prompt with course ID
 ```
 
 This produces two files:
