@@ -30,7 +30,7 @@ python fetch.py --course-id 12345    # skip the prompt
 ```
 
 This produces two files:
-- `ed_data.json` — graph data in networkx node-link format
+- `ed_data.json` — graph data in networkx node-link format (includes `course_id` for Ed linking in visualization)
 - `ed_data.graphml` — graph data for Gephi and other tools
 
 ### 2. Visualize
@@ -38,13 +38,34 @@ This produces two files:
 ```bash
 python visualize.py
 python visualize.py --input ed_data.json --output ed_graph.html
+python visualize.py --min-degree 1   # only show connected nodes
 ```
 
-Open `ed_graph.html` in a browser. Nodes are colored by category and sized by degree. Hover for details; drag to rearrange.
+Open `ed_graph.html` in a browser.
+
+### Interactive features
+
+- **Hover** a node to see title, category, type, and connection count (with a link to open on Ed)
+- **Click** a node to open the thread on Ed in a new tab
+- **Drag** nodes to rearrange the layout
+- **Filter** nodes by category using the dropdown menu
+- **Select** a node to highlight its neighborhood (dim all unrelated nodes)
+- **Keyboard** navigation: arrow keys to pan, +/- to zoom
+
+### Visual encoding
+
+| Attribute | Mapping |
+|-----------|---------|
+| Node color | Category (General, Question, Social, Lectures, Assignments, Problem Sets, etc.) |
+| Node shape | Thread type (dot = question, box = note, star = announcement, triangle = poll) |
+| Node size | Degree (number of connections) |
+| Edge color | Inherited from source node |
+| Edge direction | Arrow points from referencing thread → referenced thread |
 
 ## How it works
 
-- Fetches all threads via paginated `list_threads()`, then retrieves full content for each thread (including answers and nested comments)
-- Extracts `#NUMBER` references from every `document` field
+- `fetch.py` paginates through all threads via `list_threads()`, then fetches full content for each (including answers and nested comments)
+- Extracts `#NUMBER` references from every `document` field (thread body, answers, and all nested comments)
 - Filters references to only valid thread numbers within the course
-- Builds a directed graph: edges go from the thread containing the reference to the referenced thread
+- Builds a directed graph and saves as JSON + GraphML
+- `visualize.py` loads the JSON, builds a pyvis network, and saves an interactive HTML file
